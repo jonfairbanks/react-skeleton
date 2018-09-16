@@ -4,8 +4,8 @@ var schema = new mongoose.Schema(
   {
     request: String,
     response: String,
-    status: String,
-    timestamp: String,
+    status: Number,
+    timestamp: Date,
   }, {
     collection: 'skeleton',
     versionKey: false

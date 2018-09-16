@@ -16,7 +16,7 @@ const styles = theme => ({
     flexGrow: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#FAFAFA' || theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper,
   }
 });
 
@@ -26,19 +26,20 @@ class Sample extends React.Component {
     this.state = { sample: null };
   }
 
-  componentWillMount(){
-
-  }
-
   render() {
     const { classes } = this.props;
-    const { expanded } = this.state;
-
     return (
       <TabContainer>
         <div className={classes.root}>
-          <span><a href='https://github.com/Fairbanks-io/react-skeleton/'>React-Skeleton</a> is up and running. Edit the source to get started.</span>
-          <br/>
+          <h3><a href='https://github.com/Fairbanks-io/react-skeleton/'>React-Skeleton</a> is up and running. Edit the source to get started.</h3>
+          <h4>Included in React-Skeleton:</h4>
+          <ul>
+            <li><a href='https://reactjs.org/docs/getting-started.html' target='_blank' rel='noopener noreferrer'>React</a></li>
+            <li><a href='https://material-ui.com/' target='_blank' rel='noopener noreferrer'>Material UI</a></li>
+            <li><a href='https://fontawesome.com/icons' target='_blank' rel='noopener noreferrer'>FontAwesome 5</a><i className="fab fa-fort-awesome" style={{ 'paddingLeft': '5px' }}></i></li>
+            <li><a href='https://mongoosejs.com/' target='_blank' rel='noopener noreferrer'>Mongoose</a></li>
+            <li><a href='https://github.com/winstonjs/winston' target='_blank' rel='noopener noreferrer'>Winston Logging</a></li>
+          </ul>
         </div>
       </TabContainer>
     );
