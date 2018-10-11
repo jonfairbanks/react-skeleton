@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
-import Sample from "./components/Sample.jsx";
+import Index from "./components/index";
 
 const styles = theme => ({
   root: {
@@ -29,7 +29,7 @@ class Skeleton extends React.Component {
       <Router>
         <div className={classes.root}>
           <Switch>
-            <Route exact path="/" render={routeProps => (<Sample {...routeProps} /> )}/>
+            <Route exact path="/" render={routeProps => (<Index {...routeProps} /> )}/>
           </Switch>
         </div>
       </Router>
