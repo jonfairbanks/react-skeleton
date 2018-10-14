@@ -16,7 +16,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import { Router } from "react-router-dom"; // TO DO - use it properly below
 
 const styles = theme => ({
   root: {
@@ -136,14 +135,13 @@ class NavBar extends React.Component {
   };
 
   handleSignIn = () => {
-    this.setState({ userAuthd: true, anchorEl: null });
     this.handleMobileMenuClose();
-    //Router.push('/signin') // TO DO
+    this.props.history.push("/signin");
   };
 
   handleGoToDashboard = () => {
     this.handleMobileMenuClose();
-    //Router.push('/dashboard') // TO DO
+    this.props.history.push("/users");
   };
 
   handleGoToAdmin = () => {
@@ -156,12 +154,25 @@ class NavBar extends React.Component {
     //Router.push('/account') // TO DO
   };
 
-  handleSignOut = async () => {
-    alert('The handleSignOut function needs setup!'); // TO DO
+  handleSignOut = () => {
+    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('username');
+    localStorage.removeItem('name');
+    window.location.reload();
+
+  }
+
+  componentWillMount() {
+    if (localStorage.getItem('jwtToken')){
+      this.setState({ isSignedIn: true, anchorEl: null });
+    } else {
+      this.setState({ isSignedIn: false, anchorEl: null });
+    };
+
   }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl, userAuthd } = this.state;
+    const { anchorEl, mobileMoreAnchorEl} = this.state;
     const { classes } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -216,7 +227,7 @@ class NavBar extends React.Component {
         <MenuItem onClick={this.handleProfileMenuOpen}>
           <IconButton color="inherit">
             {this.state.isSignedIn === true
-              ? <AccountCircle />
+              ? <AccountCircle /> 
               : <Button onClick={this.handleSignIn} style={{ color: '#FFF', borderColor: '#FFF' }} variant="outlined" color="primary" size="small" className={classes.button}>Sign In</Button>
             }
           </IconButton>
