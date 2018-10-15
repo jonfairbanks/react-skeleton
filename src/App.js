@@ -4,6 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import Index from "./components/index";
+import SignIn from './components/SignIn';
+import Login from './components/Login';
+import Register from './components/Register';
+import Users from './components/Users';
 
 const styles = theme => ({
   root: {
@@ -30,6 +34,11 @@ class Skeleton extends React.Component {
         <div className={classes.root}>
           <Switch>
             <Route exact path="/" render={routeProps => (<Index {...routeProps} /> )}/>
+            <Route exact path="/login" render={routeProps => (<Login {...routeProps} /> )}/>
+            <Route exact path="/register" render={routeProps => (<Register {...routeProps} /> )}/>
+            <Route exact path="/users" render={routeProps => (<Users {...routeProps} /> )}/>
+
+            <Route exact path="/signin" render={routeProps => (<SignIn {...routeProps} /> )}/>
           </Switch>
         </div>
       </Router>
