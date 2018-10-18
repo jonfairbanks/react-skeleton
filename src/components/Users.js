@@ -19,6 +19,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import axios from 'axios';
+import EditUserDialog from './EditUserDialog';
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -47,7 +48,9 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: '_id', numeric: false, disablePadding: true, label: 'User _id' },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  { id: 'username', numeric: false, disablePadding: false, label: 'Username/Email' }
+  { id: 'username', numeric: false, disablePadding: false, label: 'Username/Email' },
+  { id: 'edit', numeric: false, disablePadding: true, label: 'Edit' },
+  { id: 'delete', numeric: false, disablePadding: true, label: 'Delete' }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -242,6 +245,24 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
+  handleDelete = (event, id) => {
+    event.stopPropagation();
+    event.preventDefault();
+    console.log(id)
+    // Get all users from API
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+    axios.delete('https://rskeletonapi.bsord.io/users', {data:{_id: id}})
+      .then(result => {
+        console.log(result);
+        this.getAllUsersData()
+      })
+      .catch((error) => {
+        if(error.response.status === 401) {
+          console.log(error.response);
+        }
+      });
+  };
+
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -252,7 +273,8 @@ class EnhancedTable extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-  componentDidMount() {
+  getAllUsersData = () => {
+    // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
     axios.get('https://rskeletonapi.bsord.io/users')
       .then(res => {
@@ -263,6 +285,13 @@ class EnhancedTable extends React.Component {
           this.props.history.push("/signin");
         }
       });
+  }
+
+  handleEdit = (event) => {
+    event.stopPropagation();
+  }
+  componentDidMount() {
+    this.getAllUsersData()
   }
 
   render() {
@@ -287,11 +316,11 @@ class EnhancedTable extends React.Component {
               {stableSort(data, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(n => {
-                  const isSelected = this.isSelected(n.id);
+                  const isSelected = this.isSelected(n._id);
                   return (
                     <TableRow
                       hover
-                      onClick={event => this.handleClick(event, n.id)}
+                      onClick={event => this.handleClick(event, n._id)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
@@ -306,8 +335,20 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       <TableCell numeric>{n.name}</TableCell>
                       <TableCell numeric>{n.username}</TableCell>
-                      <TableCell numeric>{n.carbs}</TableCell>
-                      <TableCell numeric>{n.protein}</TableCell>
+                      <TableCell padding="checkbox">
+                        <Tooltip title="Edit">
+                          <IconButton aria-label="Edit">
+                            <EditUserDialog id={n._id} callBack={() => this.getAllUsersData()} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell padding="checkbox">
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="Delete">
+                            <DeleteIcon onClick={event => this.handleDelete(event, n._id)}/>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
