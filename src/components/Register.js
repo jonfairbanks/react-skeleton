@@ -53,6 +53,7 @@ class Register extends React.Component {
     this.state = {
       username: '',
       password: '',
+      confirmPassword: '',
       name: ''
     };
   }
@@ -75,7 +76,7 @@ class Register extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { username, password, name, message } = this.state;
+    const { username, password, confirmPassword, name, message } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -129,12 +130,12 @@ class Register extends React.Component {
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="password">Confirm Password</InputLabel>
                 <Input
-                  name="confirm-password"
+                  name="confirmPassword"
                   type="password"
-                  id="confirm-password"
+                  id="confirmPassword"
                   autoComplete="new-password"
                   onChange={this.onChange}
-                  value={password}
+                  value={confirmPassword}
                 />
               </FormControl>
               <Button
