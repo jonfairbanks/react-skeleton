@@ -142,6 +142,10 @@ class Home extends React.Component {
                       <i className="fas fa-xs fa-minus"></i>
                       <ListItemText primary="Create-React-App User Guide" />
                     </ListItem>
+                    <ListItem button component="a" href="https://github.com/Fairbanks-io/ExpressAPI" target='_blank' rel='noopener noreferrer'>
+                      <i className="fas fa-xs fa-minus"></i>
+                      <ListItemText primary="Host a Node.JS Backend API with ExpressAPI" />
+                    </ListItem>
                     <ListItem button component="a" href="https://github.com/jonfairbanks/ExpressHTTP" target='_blank' rel='noopener noreferrer'>
                       <i className="fas fa-xs fa-minus"></i>
                       <ListItemText primary="Deploy to Production with ExpressHTTP" />

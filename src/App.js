@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
-import Index from "./components/index";
-import SignIn from './components/SignIn';
-import Login from './components/Login';
-import Register from './components/Register';
-import Users from './components/Users';
+import Index from "./views/index";
+import SignIn from './views/SignIn';
+import Login from './views/Login';
+import Register from './views/Register';
+import Users from './views/Users';
 
 const styles = theme => ({
   root: {
