@@ -35,7 +35,7 @@ const styles = theme => ({
   },
   avatar: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: '100%', // Fix IE11 issue.
@@ -140,14 +140,14 @@ class SignIn extends React.Component {
                 color="primary"
                 className={classes.submit}
               >
-                Sign in
+                Sign In
               </Button>
             </form>
             <Button
               type="button"
               fullWidth
-              variant="contained"
-              color="secondary"
+              variant="outlined"
+              color="primary"
               className={classes.submit}
               onClick={this.onRegister}
             >
