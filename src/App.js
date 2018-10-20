@@ -8,6 +8,7 @@ import SignIn from './views/SignIn';
 import Login from './views/Login';
 import Register from './views/Register';
 import Users from './views/Users';
+import Dashboard from './views/Dashboard';
 
 const styles = theme => ({
   root: {
@@ -38,6 +39,7 @@ class Skeleton extends React.Component {
             <Route exact path="/register" render={routeProps => (<Register {...routeProps} /> )}/>
             <Route exact path="/users" render={routeProps => (<Users {...routeProps} /> )}/>
             <Route exact path="/signin" render={routeProps => (<SignIn {...routeProps} /> )}/>
+            <Route exact path="/dashboard" render={routeProps => (<Dashboard {...routeProps} /> )}/>
           </Switch>
         </div>
       </Router>
