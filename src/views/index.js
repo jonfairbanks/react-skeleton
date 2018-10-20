@@ -12,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import Navbar from '../components/navbar';
 
-
 const styles = theme => ({
   appBar: {
     position: 'relative',
@@ -94,7 +93,7 @@ class Home extends React.Component {
               {/* End hero unit */}
               <Grid container spacing={40}>
                 <Grid item sm={6} md={4} lg={4}>
-                  <h3>Server-Side Rendered Pages</h3>
+                  <h3>Sample Pages</h3>
                   <List component="nav">
                     <ListItem button component="a" href="/page/first">
                       <i className="fas fa-xs fa-minus"></i>

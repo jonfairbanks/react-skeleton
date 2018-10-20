@@ -9,3 +9,4 @@ It already has some of the basics baked right in:
 - FontAwesome 5
 - Mongoose
 - Winston Logging
+- Cheet.js
