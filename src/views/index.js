@@ -12,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import Navbar from '../components/navbar';
 
-
 const styles = theme => ({
   appBar: {
     position: 'relative',
