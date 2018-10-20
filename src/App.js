@@ -20,14 +20,6 @@ const styles = theme => ({
 });
 
 class Skeleton extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      skeleton: null
-    };
-  }
-
   render() {
     const { classes } = this.props;
     return (
