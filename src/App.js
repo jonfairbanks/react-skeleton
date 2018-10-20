@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
-import Index from "./components/index";
-import SignIn from './components/SignIn';
-import Register from './components/Register';
-import Users from './components/Users';
+import Index from "./views/index";
+import SignIn from './views/SignIn';
+import Login from './views/Login';
+import Register from './views/Register';
+import Users from './views/Users';
+import Dashboard from './views/Dashboard';
 
 const styles = theme => ({
   root: {
@@ -33,9 +35,11 @@ class Skeleton extends React.Component {
         <div className={classes.root}>
           <Switch>
             <Route exact path="/" render={routeProps => (<Index {...routeProps} /> )}/>
+            <Route exact path="/login" render={routeProps => (<Login {...routeProps} /> )}/>
             <Route exact path="/register" render={routeProps => (<Register {...routeProps} /> )}/>
-            <Route exact path="/signin" render={routeProps => (<SignIn {...routeProps} /> )}/>
             <Route exact path="/users" render={routeProps => (<Users {...routeProps} /> )}/>
+            <Route exact path="/signin" render={routeProps => (<SignIn {...routeProps} /> )}/>
+            <Route exact path="/dashboard" render={routeProps => (<Dashboard {...routeProps} /> )}/>
           </Switch>
         </div>
       </Router>
