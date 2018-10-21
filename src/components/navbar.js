@@ -227,7 +227,7 @@ class NavBar extends React.Component {
         <MenuItem onClick={this.handleProfileMenuOpen}>
           <IconButton color="inherit">
             {this.state.isSignedIn === true
-              ? <AccountCircle />
+              ? <AccountCircle /> 
               : <Button onClick={this.handleSignIn} style={{ color: '#FFF', borderColor: '#FFF' }} variant="outlined" color="primary" size="small" className={classes.button}>Sign In</Button>
             }
           </IconButton>
@@ -263,13 +263,13 @@ class NavBar extends React.Component {
             <div className={classes.sectionDesktop}>
               {this.state.isSignedIn === true
                 ? <IconButton
-                      aria-owns={isMenuOpen ? 'material-appbar' : null}
-                      aria-haspopup="true"
-                      onClick={this.handleProfileMenuOpen}
-                      color="inherit"
-                    >
-                      <AccountCircle />
-                    </IconButton>
+                    aria-owns={isMenuOpen ? 'material-appbar' : null}
+                    aria-haspopup="true"
+                    onClick={this.handleProfileMenuOpen}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
                 : <Button onClick={this.handleSignIn} style={{ color: '#FFF', borderColor: '#FFF' }} variant="outlined" color="primary" size="small" className={classes.button}>Sign In</Button>
               }
             </div>

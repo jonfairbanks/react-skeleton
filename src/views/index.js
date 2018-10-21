@@ -12,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import Navbar from '../components/navbar';
 
-
 const styles = theme => ({
   appBar: {
     position: 'relative',
@@ -94,7 +93,7 @@ class Home extends React.Component {
               {/* End hero unit */}
               <Grid container spacing={40}>
                 <Grid item sm={6} md={4} lg={4}>
-                  <h3>Server-Side Rendered Pages</h3>
+                  <h3>Sample Pages</h3>
                   <List component="nav">
                     <ListItem button component="a" href="/page/first">
                       <i className="fas fa-xs fa-minus"></i>
@@ -141,6 +140,10 @@ class Home extends React.Component {
                     <ListItem button component="a" href="https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md" target='_blank' rel='noopener noreferrer'>
                       <i className="fas fa-xs fa-minus"></i>
                       <ListItemText primary="Create-React-App User Guide" />
+                    </ListItem>
+                    <ListItem button component="a" href="https://github.com/Fairbanks-io/ExpressAPI" target='_blank' rel='noopener noreferrer'>
+                      <i className="fas fa-xs fa-minus"></i>
+                      <ListItemText primary="Host a Node.JS Backend API with ExpressAPI" />
                     </ListItem>
                     <ListItem button component="a" href="https://github.com/jonfairbanks/ExpressHTTP" target='_blank' rel='noopener noreferrer'>
                       <i className="fas fa-xs fa-minus"></i>
