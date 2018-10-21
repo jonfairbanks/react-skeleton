@@ -8,11 +8,16 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
 import axios from 'axios';
- export default class EditUserDialog extends React.Component {
-   callBack = () => {
+
+const apiEndpoint = process.env.REACT_APP_API;
+
+export default class EditUserDialog extends React.Component {
+
+  callBack = () => {
     this.props.callBack();
   };
-   state = {
+
+  state = {
     open: false,
     data: {
       _id: '',
@@ -20,21 +25,24 @@ import axios from 'axios';
       username: ''
     }
   }
-   handleClickOpen = (event) => {
+
+  handleClickOpen = (event) => {
     event.stopPropagation();
     this.setState({ open: true });
     this.getUserData()
   };
-   handleClose = () => {
+
+  handleClose = () => {
     this.updateUserData()
     this.setState({ open: false });
     this.callBack()
   };
-   getUserData = () => {
+
+  getUserData = () => {
     console.log(this.props.id);
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.get('https://rskeletonapi.bsord.io/users/' + this.props.id)
+    axios.get('https://' + apiEndpoint + '/users/' + this.props.id)
       .then(res => {
         this.setState({ data: res.data });
       })
@@ -44,12 +52,13 @@ import axios from 'axios';
         }
       });
   }
-   updateUserData = () => {
+
+  updateUserData = () => {
     const data = this.state.data
     console.log(this.props.id);
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.put('https://rskeletonapi.bsord.io/users', {data})
+    axios.put('https://' + apiEndpoint + '/users', {data})
       .then(res => {
         console.log(res)
       })
@@ -59,12 +68,14 @@ import axios from 'axios';
         }
       });
   }
-   onChange = (e) => {
+
+  onChange = (e) => {
     const {data} = this.state
     data[e.target.name] = e.target.value;
     this.setState({data});
   }
-   render() {
+  
+  render() {
     const { _id, username, name } = this.state.data;
     return (
       <div>
@@ -81,7 +92,7 @@ import axios from 'axios';
             </DialogContentText>
             <TextField
               autoFocus
-              disabled="true"
+              disabled={true}
               margin="dense"
               id="_id"
               label="Unique User Identifier"

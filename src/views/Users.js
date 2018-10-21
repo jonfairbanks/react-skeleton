@@ -20,7 +20,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import axios from 'axios';
 import EditUserDialog from './EditUserDialog';
- function desc(a, b, orderBy) {
+
+const apiEndpoint = process.env.REACT_APP_API;
+
+function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -29,7 +32,8 @@ import EditUserDialog from './EditUserDialog';
   }
   return 0;
 }
- function stableSort(array, cmp) {
+
+function stableSort(array, cmp) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = cmp(a[0], b[0]);
@@ -38,21 +42,26 @@ import EditUserDialog from './EditUserDialog';
   });
   return stabilizedThis.map(el => el[0]);
 }
- function getSorting(order, orderBy) {
+
+function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
- const rows = [
+
+const rows = [
   { id: '_id', numeric: false, disablePadding: true, label: 'User _id' },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
   { id: 'username', numeric: false, disablePadding: false, label: 'Username/Email' },
   { id: 'edit', numeric: false, disablePadding: true, label: 'Edit' },
   { id: 'delete', numeric: false, disablePadding: true, label: 'Delete' }
 ];
- class EnhancedTableHead extends React.Component {
+
+class EnhancedTableHead extends React.Component {
+
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
-   render() {
+
+  render() {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
      return (
       <TableHead>
@@ -93,7 +102,8 @@ import EditUserDialog from './EditUserDialog';
     );
   }
 }
- EnhancedTableHead.propTypes = {
+
+EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
@@ -101,7 +111,8 @@ import EditUserDialog from './EditUserDialog';
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
- const toolbarStyles = theme => ({
+
+const toolbarStyles = theme => ({
   root: {
     paddingRight: theme.spacing.unit,
   },
@@ -125,7 +136,8 @@ import EditUserDialog from './EditUserDialog';
     flex: '0 0 auto',
   },
 });
- let EnhancedTableToolbar = props => {
+
+let EnhancedTableToolbar = props => {
   const { numSelected, classes } = props;
    return (
     <Toolbar
@@ -163,12 +175,15 @@ import EditUserDialog from './EditUserDialog';
     </Toolbar>
   );
 };
- EnhancedTableToolbar.propTypes = {
+
+EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
 };
- EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
- const styles = theme => ({
+
+EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
+
+const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
@@ -180,7 +195,8 @@ import EditUserDialog from './EditUserDialog';
     overflowX: 'auto',
   },
 });
- class EnhancedTable extends React.Component {
+
+class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
     orderBy: 'calories',
@@ -189,7 +205,8 @@ import EditUserDialog from './EditUserDialog';
     page: 0,
     rowsPerPage: 5,
   };
-   handleRequestSort = (event, property) => {
+
+  handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
      if (this.state.orderBy === property && this.state.order === 'desc') {
@@ -197,14 +214,16 @@ import EditUserDialog from './EditUserDialog';
     }
      this.setState({ order, orderBy });
   };
-   handleSelectAllClick = event => {
+
+  handleSelectAllClick = event => {
     if (event.target.checked) {
       this.setState(state => ({ selected: state.data.map(n => n.id) }));
       return;
     }
     this.setState({ selected: [] });
   };
-   handleClick = (event, id) => {
+
+  handleClick = (event, id) => {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -222,13 +241,14 @@ import EditUserDialog from './EditUserDialog';
     }
      this.setState({ selected: newSelected });
   };
-   handleDelete = (event, id) => {
+
+  handleDelete = (event, id) => {
     event.stopPropagation();
     event.preventDefault();
     console.log(id)
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.delete('https://rskeletonapi.bsord.io/users', {data:{_id: id}})
+    axios.delete('https://' + apiEndpoint + '/users', {data:{_id: id}})
       .then(result => {
         console.log(result);
         this.getAllUsersData()
@@ -239,17 +259,21 @@ import EditUserDialog from './EditUserDialog';
         }
       });
   };
-   handleChangePage = (event, page) => {
+
+  handleChangePage = (event, page) => {
     this.setState({ page });
   };
-   handleChangeRowsPerPage = event => {
+
+  handleChangeRowsPerPage = event => {
     this.setState({ rowsPerPage: event.target.value });
   };
-   isSelected = id => this.state.selected.indexOf(id) !== -1;
-   getAllUsersData = () => {
+
+  isSelected = id => this.state.selected.indexOf(id) !== -1;
+
+  getAllUsersData = () => {
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.get('https://rskeletonapi.bsord.io/users')
+    axios.get('https://' + apiEndpoint + '/users')
       .then(res => {
         this.setState({ data: res.data });
       })
@@ -259,13 +283,16 @@ import EditUserDialog from './EditUserDialog';
         }
       });
   }
-   handleEdit = (event) => {
+
+  handleEdit = (event) => {
     event.stopPropagation();
   }
+
   componentDidMount() {
     this.getAllUsersData()
   }
-   render() {
+
+  render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -348,7 +375,9 @@ import EditUserDialog from './EditUserDialog';
     );
   }
 }
- EnhancedTable.propTypes = {
+
+EnhancedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
- export default withStyles(styles)(EnhancedTable);
+
+export default withStyles(styles)(EnhancedTable);
