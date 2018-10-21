@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
 
+const apiEndpoint = process.env.REACT_APP_API;
+
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -44,18 +46,17 @@ const styles = theme => ({
   },
 });
 
-
-
-
 class Register extends React.Component {
   constructor() {
     super();
     this.state = {
       username: '',
       password: '',
+      confirmPassword: '',
       name: ''
     };
   }
+
   onChange = (e) => {
     const state = this.state
     state[e.target.name] = e.target.value;
@@ -64,10 +65,8 @@ class Register extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-
     const { username, password, name } = this.state;
-
-    axios.post('https://rskeletonapi.bsord.io/register', { username, password, name })
+    axios.post('https://' + apiEndpoint + '/register', { username, password, name })
       .then((result) => {
         this.props.history.push("/signin")
       });
@@ -75,7 +74,7 @@ class Register extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { username, password, name, message } = this.state;
+    const { username, password, confirmPassword, name, message } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -129,12 +128,12 @@ class Register extends React.Component {
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="password">Confirm Password</InputLabel>
                 <Input
-                  name="confirm-password"
+                  name="confirmPassword"
                   type="password"
-                  id="confirm-password"
+                  id="confirmPassword"
                   autoComplete="new-password"
                   onChange={this.onChange}
-                  value={password}
+                  value={confirmPassword}
                 />
               </FormControl>
               <Button

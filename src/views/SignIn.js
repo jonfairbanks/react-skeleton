@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
 
+const apiEndpoint = process.env.REACT_APP_API;
+
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -66,8 +68,8 @@ class SignIn extends React.Component {
     e.preventDefault();
 
     const { username, password } = this.state;
-    
-    axios.post('https://rskeletonapi.bsord.io/login', { username, password })
+
+    axios.post('https://' + apiEndpoint + '/login', { username, password })
       .then((result) => {
         localStorage.setItem('jwtToken', result.data.token);
         localStorage.setItem('name', result.data.name);

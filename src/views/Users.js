@@ -19,6 +19,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import axios from 'axios';
+import EditUserDialog from './EditUserDialog';
+
+const apiEndpoint = process.env.REACT_APP_API;
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -47,18 +50,20 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: '_id', numeric: false, disablePadding: true, label: 'User _id' },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  { id: 'username', numeric: false, disablePadding: false, label: 'Username/Email' }
+  { id: 'username', numeric: false, disablePadding: false, label: 'Username/Email' },
+  { id: 'edit', numeric: false, disablePadding: true, label: 'Edit' },
+  { id: 'delete', numeric: false, disablePadding: true, label: 'Delete' }
 ];
 
 class EnhancedTableHead extends React.Component {
+
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
-
-    return (
+     return (
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
@@ -134,8 +139,7 @@ const toolbarStyles = theme => ({
 
 let EnhancedTableToolbar = props => {
   const { numSelected, classes } = props;
-
-  return (
+   return (
     <Toolbar
       className={classNames(classes.root, {
         [classes.highlight]: numSelected > 0,
@@ -205,12 +209,10 @@ class EnhancedTable extends React.Component {
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
-
-    if (this.state.orderBy === property && this.state.order === 'desc') {
+     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc';
     }
-
-    this.setState({ order, orderBy });
+     this.setState({ order, orderBy });
   };
 
   handleSelectAllClick = event => {
@@ -225,8 +227,7 @@ class EnhancedTable extends React.Component {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
-
-    if (selectedIndex === -1) {
+     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
@@ -238,8 +239,25 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
+     this.setState({ selected: newSelected });
+  };
 
-    this.setState({ selected: newSelected });
+  handleDelete = (event, id) => {
+    event.stopPropagation();
+    event.preventDefault();
+    console.log(id)
+    // Get all users from API
+    axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
+    axios.delete('https://' + apiEndpoint + '/users', {data:{_id: id}})
+      .then(result => {
+        console.log(result);
+        this.getAllUsersData()
+      })
+      .catch((error) => {
+        if(error.response.status === 401) {
+          console.log(error.response);
+        }
+      });
   };
 
   handleChangePage = (event, page) => {
@@ -252,9 +270,10 @@ class EnhancedTable extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
-  componentDidMount() {
+  getAllUsersData = () => {
+    // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.get('https://rskeletonapi.bsord.io/users')
+    axios.get('https://' + apiEndpoint + '/users')
       .then(res => {
         this.setState({ data: res.data });
       })
@@ -265,12 +284,19 @@ class EnhancedTable extends React.Component {
       });
   }
 
+  handleEdit = (event) => {
+    event.stopPropagation();
+  }
+
+  componentDidMount() {
+    this.getAllUsersData()
+  }
+
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
-    return (
+     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
@@ -287,11 +313,11 @@ class EnhancedTable extends React.Component {
               {stableSort(data, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(n => {
-                  const isSelected = this.isSelected(n.id);
+                  const isSelected = this.isSelected(n._id);
                   return (
                     <TableRow
                       hover
-                      onClick={event => this.handleClick(event, n.id)}
+                      onClick={event => this.handleClick(event, n._id)}
                       role="checkbox"
                       aria-checked={isSelected}
                       tabIndex={-1}
@@ -306,8 +332,20 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       <TableCell numeric>{n.name}</TableCell>
                       <TableCell numeric>{n.username}</TableCell>
-                      <TableCell numeric>{n.carbs}</TableCell>
-                      <TableCell numeric>{n.protein}</TableCell>
+                      <TableCell padding="checkbox">
+                        <Tooltip title="Edit">
+                          <IconButton aria-label="Edit">
+                            <EditUserDialog id={n._id} callBack={() => this.getAllUsersData()} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                      <TableCell padding="checkbox">
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="Delete">
+                            <DeleteIcon onClick={event => this.handleDelete(event, n._id)}/>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
