@@ -1,4 +1,5 @@
 # React-Skeleton
+![React-Skeleton](https://raw.githubusercontent.com/Fairbanks-io/react-skeleton/master/react-skeleton.png)
 
 ### A simple framework to help get you stared with your React.js app.
 
