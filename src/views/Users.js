@@ -20,6 +20,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import axios from 'axios';
 import EditUserDialog from './EditUserDialog';
+
+const apiEndpoint = process.env.REACT_APP_API;
+
  function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -228,7 +231,7 @@ import EditUserDialog from './EditUserDialog';
     console.log(id)
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.delete('https://rskeletonapi.bsord.io/users', {data:{_id: id}})
+    axios.delete('https://' + apiEndpoint + '/users', {data:{_id: id}})
       .then(result => {
         console.log(result);
         this.getAllUsersData()
@@ -249,7 +252,7 @@ import EditUserDialog from './EditUserDialog';
    getAllUsersData = () => {
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.get('https://rskeletonapi.bsord.io/users')
+    axios.get('https://' + apiEndpoint + '/users')
       .then(res => {
         this.setState({ data: res.data });
       })

@@ -11,6 +11,9 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
+
+const apiEndpoint = process.env.REACT_APP_API;
+
  const styles = theme => ({
   layout: {
     width: 'auto',
@@ -60,7 +63,7 @@ import axios from 'axios';
    onSubmit = (e) => {
     e.preventDefault();
      const { username, password, name } = this.state;
-     axios.post('https://rskeletonapi.bsord.io/register', { username, password, name })
+     axios.post('https://' + apiEndpoint + '/register', { username, password, name })
       .then((result) => {
         this.props.history.push("/signin")
       });
