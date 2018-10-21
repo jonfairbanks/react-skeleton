@@ -11,8 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import axios from 'axios';
-
-const styles = theme => ({
+ const styles = theme => ({
   layout: {
     width: 'auto',
     display: 'block', // Fix IE11 issue.
@@ -43,16 +42,13 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
-
-
-
-
-class Register extends React.Component {
+ class Register extends React.Component {
   constructor() {
     super();
     this.state = {
       username: '',
       password: '',
+      confirmPassword: '',
       name: ''
     };
   }
@@ -61,21 +57,17 @@ class Register extends React.Component {
     state[e.target.name] = e.target.value;
     this.setState(state);
   }
-
-  onSubmit = (e) => {
+   onSubmit = (e) => {
     e.preventDefault();
-
-    const { username, password, name } = this.state;
-
-    axios.post('https://rskeletonapi.bsord.io/register', { username, password, name })
+     const { username, password, name } = this.state;
+     axios.post('https://rskeletonapi.bsord.io/register', { username, password, name })
       .then((result) => {
         this.props.history.push("/signin")
       });
   }
-
-  render() {
+   render() {
     const { classes } = this.props;
-    const { username, password, name, message } = this.state;
+    const { username, password, confirmPassword, name, message } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -129,12 +121,12 @@ class Register extends React.Component {
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="password">Confirm Password</InputLabel>
                 <Input
-                  name="confirm-password"
+                  name="confirmPassword"
                   type="password"
-                  id="confirm-password"
+                  id="confirmPassword"
                   autoComplete="new-password"
                   onChange={this.onChange}
-                  value={password}
+                  value={confirmPassword}
                 />
               </FormControl>
               <Button
@@ -153,9 +145,7 @@ class Register extends React.Component {
     );
   }
 }
-
-Register.propTypes = {
+ Register.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-export default withStyles(styles)(Register);
+ export default withStyles(styles)(Register);
