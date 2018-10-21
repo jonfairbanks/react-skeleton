@@ -21,6 +21,8 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 import axios from 'axios';
 import EditUserDialog from './EditUserDialog';
 
+import Navbar from '../components/navbar';
+
 const apiEndpoint = process.env.REACT_APP_API;
 
 function desc(a, b, orderBy) {
@@ -56,7 +58,6 @@ const rows = [
 ];
 
 class EnhancedTableHead extends React.Component {
-
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
@@ -297,81 +298,84 @@ class EnhancedTable extends React.Component {
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
      return (
-      <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n._id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleClick(event, n._id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n._id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n._id}
-                      </TableCell>
-                      <TableCell numeric>{n.name}</TableCell>
-                      <TableCell numeric>{n.username}</TableCell>
-                      <TableCell padding="checkbox">
-                        <Tooltip title="Edit">
-                          <IconButton aria-label="Edit">
-                            <EditUserDialog id={n._id} callBack={() => this.getAllUsersData()} />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell padding="checkbox">
-                        <Tooltip title="Delete">
-                          <IconButton aria-label="Delete">
-                            <DeleteIcon onClick={event => this.handleDelete(event, n._id)}/>
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <TablePagination
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </Paper>
+      <div>
+        <Navbar/>
+        <Paper className={classes.root}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    const isSelected = this.isSelected(n._id);
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleClick(event, n._id)}
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n._id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isSelected} />
+                        </TableCell>
+                        <TableCell component="th" scope="row" padding="none">
+                          {n._id}
+                        </TableCell>
+                        <TableCell numeric>{n.name}</TableCell>
+                        <TableCell numeric>{n.username}</TableCell>
+                        <TableCell padding="checkbox">
+                          <Tooltip title="Edit">
+                            <IconButton aria-label="Edit">
+                              <EditUserDialog id={n._id} callBack={() => this.getAllUsersData()} />
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell padding="checkbox">
+                          <Tooltip title="Delete">
+                            <IconButton aria-label="Delete">
+                              <DeleteIcon onClick={event => this.handleDelete(event, n._id)}/>
+                            </IconButton>
+                          </Tooltip>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            component="div"
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              'aria-label': 'Previous Page',
+            }}
+            nextIconButtonProps={{
+              'aria-label': 'Next Page',
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
+      </div>
     );
   }
 }
