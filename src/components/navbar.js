@@ -141,12 +141,12 @@ class NavBar extends React.Component {
 
   handleGoToDashboard = () => {
     this.handleMobileMenuClose();
-    this.props.history.push("/users");
+    this.props.history.push("/dashboard");
   };
 
   handleGoToAdmin = () => {
     this.handleMobileMenuClose();
-    //Router.push('/admin') // TO DO
+    this.props.history.push("/users");
   };
 
   handleGoToAccount = () => {
