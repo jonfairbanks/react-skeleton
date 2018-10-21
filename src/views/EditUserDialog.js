@@ -11,11 +11,13 @@ import axios from 'axios';
 
 const apiEndpoint = process.env.REACT_APP_API;
 
- export default class EditUserDialog extends React.Component {
-   callBack = () => {
+export default class EditUserDialog extends React.Component {
+
+  callBack = () => {
     this.props.callBack();
   };
-   state = {
+
+  state = {
     open: false,
     data: {
       _id: '',
@@ -23,17 +25,20 @@ const apiEndpoint = process.env.REACT_APP_API;
       username: ''
     }
   }
-   handleClickOpen = (event) => {
+
+  handleClickOpen = (event) => {
     event.stopPropagation();
     this.setState({ open: true });
     this.getUserData()
   };
-   handleClose = () => {
+
+  handleClose = () => {
     this.updateUserData()
     this.setState({ open: false });
     this.callBack()
   };
-   getUserData = () => {
+
+  getUserData = () => {
     console.log(this.props.id);
     // Get all users from API
     axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
@@ -47,7 +52,8 @@ const apiEndpoint = process.env.REACT_APP_API;
         }
       });
   }
-   updateUserData = () => {
+
+  updateUserData = () => {
     const data = this.state.data
     console.log(this.props.id);
     // Get all users from API
@@ -62,12 +68,14 @@ const apiEndpoint = process.env.REACT_APP_API;
         }
       });
   }
-   onChange = (e) => {
+
+  onChange = (e) => {
     const {data} = this.state
     data[e.target.name] = e.target.value;
     this.setState({data});
   }
-   render() {
+  
+  render() {
     const { _id, username, name } = this.state.data;
     return (
       <div>

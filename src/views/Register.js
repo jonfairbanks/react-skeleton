@@ -14,7 +14,7 @@ import axios from 'axios';
 
 const apiEndpoint = process.env.REACT_APP_API;
 
- const styles = theme => ({
+const styles = theme => ({
   layout: {
     width: 'auto',
     display: 'block', // Fix IE11 issue.
@@ -45,7 +45,8 @@ const apiEndpoint = process.env.REACT_APP_API;
     marginTop: theme.spacing.unit * 3,
   },
 });
- class Register extends React.Component {
+
+class Register extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -55,20 +56,23 @@ const apiEndpoint = process.env.REACT_APP_API;
       name: ''
     };
   }
+
   onChange = (e) => {
     const state = this.state
     state[e.target.name] = e.target.value;
     this.setState(state);
   }
-   onSubmit = (e) => {
+
+  onSubmit = (e) => {
     e.preventDefault();
-     const { username, password, name } = this.state;
-     axios.post('https://' + apiEndpoint + '/register', { username, password, name })
+    const { username, password, name } = this.state;
+    axios.post('https://' + apiEndpoint + '/register', { username, password, name })
       .then((result) => {
         this.props.history.push("/signin")
       });
   }
-   render() {
+
+  render() {
     const { classes } = this.props;
     const { username, password, confirmPassword, name, message } = this.state;
     return (
@@ -148,7 +152,9 @@ const apiEndpoint = process.env.REACT_APP_API;
     );
   }
 }
- Register.propTypes = {
+
+Register.propTypes = {
   classes: PropTypes.object.isRequired,
 };
- export default withStyles(styles)(Register);
+
+export default withStyles(styles)(Register);
