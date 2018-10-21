@@ -76,7 +76,7 @@ class SignIn extends React.Component {
         localStorage.setItem('username', result.data.username);
 
         this.setState({ message: '' });
-        this.props.history.push('/')
+        this.props.history.push('/dashboard')
       })
       .catch((error) => {
         if(error.response.status === 401) {
