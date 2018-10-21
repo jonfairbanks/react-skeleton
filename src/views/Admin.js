@@ -70,13 +70,7 @@ class EnhancedTableHead extends React.Component {
 	}
 
 	render() {
-		const {
-			onSelectAllClick,
-			order,
-			orderBy,
-			numSelected,
-			rowCount,
-		} = this.props
+		const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props
 		return (
 			<TableHead>
 				<TableRow>
@@ -368,11 +362,7 @@ class EnhancedTable extends React.Component {
 												<TableCell padding="checkbox">
 													<Tooltip title="Delete">
 														<IconButton aria-label="Delete">
-															<DeleteIcon
-																onClick={event =>
-																	this.handleDelete(event, n._id)
-																}
-															/>
+															<DeleteIcon onClick={event => this.handleDelete(event, n._id)} />
 														</IconButton>
 													</Tooltip>
 												</TableCell>

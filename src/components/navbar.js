@@ -205,11 +205,7 @@ class NavBar extends React.Component {
 			>
 				<MenuItem>
 					<IconButton color="inherit">
-						<Badge
-							className={classes.margin}
-							badgeContent={4}
-							color="secondary"
-						>
+						<Badge className={classes.margin} badgeContent={4} color="secondary">
 							<MailIcon />
 						</Badge>
 					</IconButton>
@@ -217,11 +213,7 @@ class NavBar extends React.Component {
 				</MenuItem>
 				<MenuItem>
 					<IconButton color="inherit">
-						<Badge
-							className={classes.margin}
-							badgeContent={11}
-							color="secondary"
-						>
+						<Badge className={classes.margin} badgeContent={11} color="secondary">
 							<NotificationsIcon />
 						</Badge>
 					</IconButton>

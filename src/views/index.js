@@ -88,10 +88,7 @@ class Home extends React.Component {
 											rel="noopener noreferrer"
 										>
 											<Button variant="contained" color="primary">
-												<i
-													style={{ paddingRight: '10px' }}
-													className="fab fa-github"
-												/>
+												<i style={{ paddingRight: '10px' }} className="fab fa-github" />
 												View on GitHub
 											</Button>
 										</a>

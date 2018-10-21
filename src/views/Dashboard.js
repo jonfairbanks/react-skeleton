@@ -171,10 +171,7 @@ class Dashboard extends Component {
 							this.state.open && classes.appBarShift
 						)}
 					>
-						<Toolbar
-							disableGutters={!this.state.open}
-							className={classes.toolbar}
-						>
+						<Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
 							<IconButton
 								color="inherit"
 								aria-label="Open drawer"
@@ -193,10 +190,7 @@ class Dashboard extends Component {
 								noWrap
 							>
 								<a style={{ textDecoration: 'none', color: 'white' }} href="/">
-									<i
-										style={{ paddingRight: '10px' }}
-										className="fab fa-react"
-									/>
+									<i style={{ paddingRight: '10px' }} className="fab fa-react" />
 									React-Skeleton
 								</a>
 							</Typography>

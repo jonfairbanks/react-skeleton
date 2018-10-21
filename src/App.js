@@ -24,11 +24,7 @@ class Skeleton extends React.Component {
 			<Router>
 				<div className={classes.root}>
 					<Switch>
-						<Route
-							exact
-							path="/"
-							render={routeProps => <Index {...routeProps} />}
-						/>
+						<Route exact path="/" render={routeProps => <Index {...routeProps} />} />
 						<Route
 							exact
 							path="/register"
