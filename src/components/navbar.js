@@ -1,21 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Input from '@material-ui/core/Input';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import React from 'react'
+import PropTypes from 'prop-types'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
+import Input from '@material-ui/core/Input'
+import Badge from '@material-ui/core/Badge'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import { withStyles } from '@material-ui/core/styles'
+import SearchIcon from '@material-ui/icons/Search'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MailIcon from '@material-ui/icons/Mail'
+import NotificationsIcon from '@material-ui/icons/Notifications'
+import MoreIcon from '@material-ui/icons/MoreVert'
 
 const styles = theme => ({
   root: {
@@ -89,10 +89,9 @@ const styles = theme => ({
       display: 'none',
     },
   },
-});
+})
 
 class NavBar extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -100,7 +99,7 @@ class NavBar extends React.Component {
       //isSignedIn: (props.session.user) ? true : false, // TO DO
       name: '',
       email: '',
-      photo: ''
+      photo: '',
     }
     /*
     if (props.session.user) {
@@ -115,67 +114,65 @@ class NavBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-  };
+  }
 
   handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.setState({ anchorEl: event.currentTarget })
+  }
 
   handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
+    this.setState({ anchorEl: null })
+    this.handleMobileMenuClose()
+  }
 
   handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
+    this.setState({ mobileMoreAnchorEl: event.currentTarget })
+  }
 
   handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
+    this.setState({ mobileMoreAnchorEl: null })
+  }
 
   handleSignIn = () => {
-    this.handleMobileMenuClose();
-    this.props.history.push("/signin");
-  };
+    this.handleMobileMenuClose()
+    this.props.history.push('/signin')
+  }
 
   handleGoToDashboard = () => {
-    this.handleMobileMenuClose();
-    this.props.history.push("/users");
-  };
+    this.handleMobileMenuClose()
+    this.props.history.push('/dashboard')
+  }
 
   handleGoToAdmin = () => {
-    this.handleMobileMenuClose();
-    //Router.push('/admin') // TO DO
-  };
+    this.handleMobileMenuClose()
+    this.props.history.push('/users')
+  }
 
   handleGoToAccount = () => {
-    this.handleMobileMenuClose();
+    this.handleMobileMenuClose()
     //Router.push('/account') // TO DO
-  };
+  }
 
   handleSignOut = () => {
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('username');
-    localStorage.removeItem('name');
-    window.location.reload();
-
+    localStorage.removeItem('jwtToken')
+    localStorage.removeItem('username')
+    localStorage.removeItem('name')
+    window.location.reload()
   }
 
   componentWillMount() {
-    if (localStorage.getItem('jwtToken')){
-      this.setState({ isSignedIn: true, anchorEl: null });
+    if (localStorage.getItem('jwtToken')) {
+      this.setState({ isSignedIn: true, anchorEl: null })
     } else {
-      this.setState({ isSignedIn: false, anchorEl: null });
-    };
-
+      this.setState({ isSignedIn: false, anchorEl: null })
+    }
   }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl} = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const { anchorEl, mobileMoreAnchorEl } = this.state
+    const { classes } = this.props
+    const isMenuOpen = Boolean(anchorEl)
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
     const renderMenu = (
       <Menu
@@ -185,20 +182,18 @@ class NavBar extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        {this.state.isSignedIn === true
-          ? <div>
-              <MenuItem onClick={this.handleGoToDashboard}>Dashboard</MenuItem>
-              {this.state.isAdmin === true
-                ? <MenuItem onClick={this.handleGoToAdmin}>Admin</MenuItem>
-                : null
-              }
-              <MenuItem onClick={this.handleGoToAccount}>Account</MenuItem>
-              <MenuItem onClick={this.handleSignOut}>Sign Out</MenuItem>
-            </div>
-          : null
-        }
+        {this.state.isSignedIn === true ? (
+          <div>
+            <MenuItem onClick={this.handleGoToDashboard}>Dashboard</MenuItem>
+            {this.state.isAdmin === true ? (
+              <MenuItem onClick={this.handleGoToAdmin}>Admin</MenuItem>
+            ) : null}
+            <MenuItem onClick={this.handleGoToAccount}>Account</MenuItem>
+            <MenuItem onClick={this.handleSignOut}>Sign Out</MenuItem>
+          </div>
+        ) : null}
       </Menu>
-    );
+    )
 
     const renderMobileMenu = (
       <Menu
@@ -210,7 +205,11 @@ class NavBar extends React.Component {
       >
         <MenuItem>
           <IconButton color="inherit">
-            <Badge className={classes.margin} badgeContent={4} color="secondary">
+            <Badge
+              className={classes.margin}
+              badgeContent={4}
+              color="secondary"
+            >
               <MailIcon />
             </Badge>
           </IconButton>
@@ -218,7 +217,11 @@ class NavBar extends React.Component {
         </MenuItem>
         <MenuItem>
           <IconButton color="inherit">
-            <Badge className={classes.margin} badgeContent={11} color="secondary">
+            <Badge
+              className={classes.margin}
+              badgeContent={11}
+              color="secondary"
+            >
               <NotificationsIcon />
             </Badge>
           </IconButton>
@@ -226,23 +229,38 @@ class NavBar extends React.Component {
         </MenuItem>
         <MenuItem onClick={this.handleProfileMenuOpen}>
           <IconButton color="inherit">
-            {this.state.isSignedIn === true
-              ? <AccountCircle /> 
-              : <Button onClick={this.handleSignIn} style={{ color: '#FFF', borderColor: '#FFF' }} variant="outlined" color="primary" size="small" className={classes.button}>Sign In</Button>
-            }
+            {this.state.isSignedIn === true ? (
+              <AccountCircle />
+            ) : (
+              <Button
+                onClick={this.handleSignIn}
+                style={{ color: '#FFF', borderColor: '#FFF' }}
+                variant="outlined"
+                color="primary"
+                size="small"
+                className={classes.button}
+              >
+                Sign In
+              </Button>
+            )}
           </IconButton>
           <p>Profile</p>
         </MenuItem>
       </Menu>
-    );
+    )
 
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography className={classes.title} variant="title" color="inherit" noWrap>
-              <a style={{ textDecoration: 'none', color: 'white' }} href='/'>
-                <i style={{ paddingRight: '10px' }} className="fab fa-react"/>
+            <Typography
+              className={classes.title}
+              variant="title"
+              color="inherit"
+              noWrap
+            >
+              <a style={{ textDecoration: 'none', color: 'white' }} href="/">
+                <i style={{ paddingRight: '10px' }} className="fab fa-react" />
                 React-Skeleton
               </a>
             </Typography>
@@ -261,20 +279,34 @@ class NavBar extends React.Component {
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              {this.state.isSignedIn === true
-                ? <IconButton
-                    aria-owns={isMenuOpen ? 'material-appbar' : null}
-                    aria-haspopup="true"
-                    onClick={this.handleProfileMenuOpen}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                : <Button onClick={this.handleSignIn} style={{ color: '#FFF', borderColor: '#FFF' }} variant="outlined" color="primary" size="small" className={classes.button}>Sign In</Button>
-              }
+              {this.state.isSignedIn === true ? (
+                <IconButton
+                  aria-owns={isMenuOpen ? 'material-appbar' : null}
+                  aria-haspopup="true"
+                  onClick={this.handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              ) : (
+                <Button
+                  onClick={this.handleSignIn}
+                  style={{ color: '#FFF', borderColor: '#FFF' }}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  className={classes.button}
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
             <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
+              <IconButton
+                aria-haspopup="true"
+                onClick={this.handleMobileMenuOpen}
+                color="inherit"
+              >
                 <MoreIcon />
               </IconButton>
             </div>
@@ -283,12 +315,12 @@ class NavBar extends React.Component {
         {renderMenu}
         {renderMobileMenu}
       </div>
-    );
+    )
   }
 }
 
 NavBar.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(NavBar);
+export default withStyles(styles)(NavBar)

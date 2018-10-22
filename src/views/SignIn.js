@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import axios from 'axios';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import FormControl from '@material-ui/core/FormControl'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import LockIcon from '@material-ui/icons/LockOutlined'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import withStyles from '@material-ui/core/styles/withStyles'
+import axios from 'axios'
 
-const apiEndpoint = process.env.REACT_APP_API;
+const apiEndpoint = process.env.REACT_APP_API
 
 const styles = theme => ({
   layout: {
@@ -33,7 +33,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`,
   },
   avatar: {
     margin: theme.spacing.unit,
@@ -46,52 +47,55 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
-});
+})
 
 class SignIn extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       username: '',
       password: '',
-      message: ''
-    };
+      message: '',
+    }
   }
 
-  onChange = (e) => {
+  onChange = e => {
     const state = this.state
-    state[e.target.name] = e.target.value;
-    this.setState(state);
+    state[e.target.name] = e.target.value
+    this.setState(state)
   }
 
-  onSubmit = (e) => {
-    e.preventDefault();
+  onSubmit = e => {
+    e.preventDefault()
 
-    const { username, password } = this.state;
+    const { username, password } = this.state
 
-    axios.post('https://' + apiEndpoint + '/login', { username, password })
-      .then((result) => {
-        localStorage.setItem('jwtToken', result.data.token);
-        localStorage.setItem('name', result.data.name);
-        localStorage.setItem('username', result.data.username);
+    axios
+      .post('https://' + apiEndpoint + '/login', { username, password })
+      .then(result => {
+        localStorage.setItem('jwtToken', result.data.token)
+        localStorage.setItem('name', result.data.name)
+        localStorage.setItem('username', result.data.username)
 
-        this.setState({ message: '' });
-        this.props.history.push('/')
+        this.setState({ message: '' })
+        this.props.history.push('/dashboard')
       })
-      .catch((error) => {
-        if(error.response.status === 401) {
-          this.setState({ message: 'Login failed. Username or password not match' });
+      .catch(error => {
+        if (error.response.status === 401) {
+          this.setState({
+            message: 'Login failed. Username or password not match',
+          })
         }
-      });
+      })
   }
 
-  onRegister = (e) => {
+  onRegister = e => {
     this.props.history.push('/register')
   }
 
   render() {
-    const { classes } = this.props;
-    const { username, password, message } = this.state;
+    const { classes } = this.props
+    const { username, password, message } = this.state
     return (
       <React.Fragment>
         <CssBaseline />
@@ -100,15 +104,9 @@ class SignIn extends React.Component {
             <Avatar className={classes.avatar}>
               <LockIcon />
             </Avatar>
-            <Typography variant="headline">
-              Sign in
-            </Typography>
+            <Typography variant="headline">Sign in</Typography>
             <form className={classes.form} onSubmit={this.onSubmit}>
-              {message !== '' &&
-                <div role="alert">
-                  { message }
-                </div>
-              }
+              {message !== '' && <div role="alert">{message}</div>}
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Email Address</InputLabel>
                 <Input
@@ -158,12 +156,12 @@ class SignIn extends React.Component {
           </Paper>
         </main>
       </React.Fragment>
-    );
+    )
   }
 }
 
 SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles)(SignIn)

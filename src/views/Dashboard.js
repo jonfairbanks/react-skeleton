@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { mainMenuItems, secondaryMenuItems } from '../components/menuItems';
-import SearchIcon from '@material-ui/icons/Search';
-import Input from '@material-ui/core/Input';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import { withStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import { mainMenuItems, secondaryMenuItems } from '../components/menuItems'
+import SearchIcon from '@material-ui/icons/Search'
+import Input from '@material-ui/core/Input'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import AccountCircle from '@material-ui/icons/AccountCircle'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
@@ -135,84 +135,101 @@ const styles = theme => ({
       width: 180,
     },
   },
-});
+})
 
 class Dashboard extends Component {
   state = {
     open: true,
     anchorEl: null,
-  };
+  }
 
   handleDrawerOpen = () => {
-    this.setState({ open: true });
-  };
+    this.setState({ open: true })
+  }
 
   handleDrawerClose = () => {
-    this.setState({ open: false });
-  };
+    this.setState({ open: false })
+  }
 
   handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.setState({ anchorEl: event.currentTarget })
+  }
 
   render() {
-    const { anchorEl } = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    
+    const { anchorEl } = this.state
+    const { classes } = this.props
+    const isMenuOpen = Boolean(anchorEl)
+
     return (
       <React.Fragment>
         <CssBaseline />
         <div className={classes.root}>
           <AppBar
             position="absolute"
-            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+            className={classNames(
+              classes.appBar,
+              this.state.open && classes.appBarShift
+            )}
           >
-            <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
-                <IconButton
-                    color="inherit"
-                    aria-label="Open drawer"
-                    onClick={this.handleDrawerOpen}
-                    className={classNames(
-                    classes.menuButton,
-                    this.state.open && classes.menuButtonHidden,
-                    )}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography className={classes.title} variant="title" color="inherit" noWrap>
-                    <a style={{ textDecoration: 'none', color: 'white' }} href='/'>
-                        <i style={{ paddingRight: '10px' }} className="fab fa-react"/>
-                        React-Skeleton
-                    </a>
-                </Typography>
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon />
-                    </div>
-                    <Input
-                        placeholder="Search…"
-                        disableUnderline
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                    />
+            <Toolbar
+              disableGutters={!this.state.open}
+              className={classes.toolbar}
+            >
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(
+                  classes.menuButton,
+                  this.state.open && classes.menuButtonHidden
+                )}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                className={classes.title}
+                variant="title"
+                color="inherit"
+                noWrap
+              >
+                <a style={{ textDecoration: 'none', color: 'white' }} href="/">
+                  <i
+                    style={{ paddingRight: '10px' }}
+                    className="fab fa-react"
+                  />
+                  React-Skeleton
+                </a>
+              </Typography>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
                 </div>
-                <IconButton
-                    aria-owns={isMenuOpen ? 'material-appbar' : null}
-                    aria-haspopup="true"
-                    onClick={this.handleProfileMenuOpen}
-                    color="inherit"
-                >
-                    <AccountCircle />
-                </IconButton>
+                <Input
+                  placeholder="Search…"
+                  disableUnderline
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                />
+              </div>
+              <IconButton
+                aria-owns={isMenuOpen ? 'material-appbar' : null}
+                aria-haspopup="true"
+                onClick={this.handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
             </Toolbar>
           </AppBar>
           <Drawer
             variant="permanent"
             classes={{
-              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+              paper: classNames(
+                classes.drawerPaper,
+                !this.state.open && classes.drawerPaperClose
+              ),
             }}
             open={this.state.open}
           >
@@ -234,12 +251,12 @@ class Dashboard extends Component {
           </main>
         </div>
       </React.Fragment>
-    );
+    )
   }
 }
 
 Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(Dashboard)

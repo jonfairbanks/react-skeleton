@@ -1,18 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import axios from 'axios';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import FormControl from '@material-ui/core/FormControl'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import LockIcon from '@material-ui/icons/LockOutlined'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import withStyles from '@material-ui/core/styles/withStyles'
+import axios from 'axios'
 
-const apiEndpoint = process.env.REACT_APP_API;
+const apiEndpoint = process.env.REACT_APP_API
 
 const styles = theme => ({
   layout: {
@@ -31,11 +31,12 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`,
   },
   avatar: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: '100%', // Fix IE11 issue.
@@ -44,37 +45,42 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
-});
+})
 
 class Register extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       username: '',
       password: '',
       confirmPassword: '',
-      name: ''
-    };
+      name: '',
+    }
   }
 
-  onChange = (e) => {
+  onChange = e => {
     const state = this.state
-    state[e.target.name] = e.target.value;
-    this.setState(state);
+    state[e.target.name] = e.target.value
+    this.setState(state)
   }
 
-  onSubmit = (e) => {
-    e.preventDefault();
-    const { username, password, name } = this.state;
-    axios.post('https://' + apiEndpoint + '/register', { username, password, name })
-      .then((result) => {
-        this.props.history.push("/signin")
-      });
+  onSubmit = e => {
+    e.preventDefault()
+    const { username, password, name } = this.state
+    axios
+      .post('https://' + apiEndpoint + '/register', {
+        username,
+        password,
+        name,
+      })
+      .then(result => {
+        this.props.history.push('/signin')
+      })
   }
 
   render() {
-    const { classes } = this.props;
-    const { username, password, confirmPassword, name, message } = this.state;
+    const { classes } = this.props
+    const { username, password, confirmPassword, name, message } = this.state
     return (
       <React.Fragment>
         <CssBaseline />
@@ -83,15 +89,9 @@ class Register extends React.Component {
             <Avatar className={classes.avatar}>
               <LockIcon />
             </Avatar>
-            <Typography variant="headline">
-              Register
-            </Typography>
+            <Typography variant="headline">Register</Typography>
             <form className={classes.form} onSubmit={this.onSubmit}>
-              {message !== '' &&
-                <div role="alert">
-                  { message }
-                </div>
-              }
+              {message !== '' && <div role="alert">{message}</div>}
               <FormControl margin="normal" required fullWidth>
                 <InputLabel htmlFor="email">Name</InputLabel>
                 <Input
@@ -149,12 +149,12 @@ class Register extends React.Component {
           </Paper>
         </main>
       </React.Fragment>
-    );
+    )
   }
 }
 
 Register.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+}
 
-export default withStyles(styles)(Register);
+export default withStyles(styles)(Register)
