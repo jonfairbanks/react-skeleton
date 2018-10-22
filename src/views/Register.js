@@ -68,7 +68,7 @@ class Register extends React.Component {
     e.preventDefault()
     const { username, password, name } = this.state
     axios
-      .post('https://' + apiEndpoint + '/register', {
+      .post('https://' + apiEndpoint + '/user', {
         username,
         password,
         name,
