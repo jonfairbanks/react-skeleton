@@ -11,13 +11,14 @@ It already has some of the basics baked right in:
 - Mongoose DB Modeling
 - Winston Logging
 - Cheet.js
-- OAuth via [passport](https://github.com/jaredhanson/passport)
+- [Prettier](https://prettier.io/) code formatting
 
 #### Getting Started
 1. `yarn install` to get dependencies
 2. `yarn start` to launch the development server
-3. `yarn build` when ready to build for production
-4. `yarn eject` for advanced mode
+3. `yarn prettier` to format code using [passport](https://github.com/jaredhanson/passport)
+4. `yarn build` when ready to build for production
+5. `yarn eject` for advanced mode
  
 #### Available Environment Variable Options
 * PORT=3001
