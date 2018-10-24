@@ -52,12 +52,7 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: '_id', numeric: false, disablePadding: true, label: 'User _id' },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  {
-    id: 'username',
-    numeric: false,
-    disablePadding: false,
-    label: 'Username/Email',
-  },
+  { id: 'username', numeric: false, disablePadding: false, label: 'Email' },
   { id: 'edit', numeric: false, disablePadding: true, label: 'Edit' },
   { id: 'delete', numeric: false, disablePadding: true, label: 'Delete' },
 ]
@@ -349,8 +344,8 @@ class EnhancedTable extends React.Component {
                         <TableCell component="th" scope="row" padding="none">
                           {n._id}
                         </TableCell>
-                        <TableCell numeric>{n.name}</TableCell>
-                        <TableCell numeric>{n.username}</TableCell>
+                        <TableCell>{n.name}</TableCell>
+                        <TableCell>{n.username}</TableCell>
                         <TableCell padding="checkbox">
                           <Tooltip title="Edit">
                             <IconButton aria-label="Edit">
