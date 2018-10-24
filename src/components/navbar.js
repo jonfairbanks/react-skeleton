@@ -96,19 +96,18 @@ class NavBar extends React.Component {
     super(props)
     this.state = {
       session: props.session,
-      //isSignedIn: (props.session.user) ? true : false, // TO DO
+      isSignedIn: (props.session.user) ? true : false,
       name: '',
       email: '',
       photo: '',
     }
-    /*
+    
     if (props.session.user) {
       this.state.name = props.session.user.name
       this.state.email = props.session.user.email
       this.state.photo = props.session.user.photo
       this.state.isAdmin =  (props.session.user.admin) ? true : false
     }
-    */ // TO DO
   }
 
   state = {
@@ -165,6 +164,10 @@ class NavBar extends React.Component {
       this.setState({ isSignedIn: true, anchorEl: null })
     } else {
       this.setState({ isSignedIn: false, anchorEl: null })
+    }
+
+    if (localStorage.getItem('session.admin')) {
+      this.setState({ isAdminUser: true, anchorEl: null })
     }
   }
 
