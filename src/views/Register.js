@@ -10,7 +10,7 @@ import LockIcon from '@material-ui/icons/LockOutlined'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
-const UserApi = require('../controllers/UserAPI')
+const Auth = require('../controllers/Auth')
 
 const styles = theme => ({
   layout: {
@@ -70,7 +70,7 @@ class Register extends React.Component {
       name: this.state.name
     }
 
-    UserApi
+    Auth
       .registerUser(NewUser, result => {
         console.log(result);
         this.props.history.push('/signin')
