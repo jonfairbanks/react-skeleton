@@ -52,12 +52,7 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: '_id', numeric: false, disablePadding: true, label: 'User _id' },
   { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  {
-    id: 'username',
-    numeric: false,
-    disablePadding: false,
-    label: 'Username/Email',
-  },
+  { id: 'username', numeric: false, disablePadding: false, label: 'Email' },
   { id: 'edit', numeric: false, disablePadding: true, label: 'Edit' },
   { id: 'delete', numeric: false, disablePadding: true, label: 'Delete' },
 ]
