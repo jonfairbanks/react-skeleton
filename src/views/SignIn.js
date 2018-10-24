@@ -12,9 +12,7 @@ import LockIcon from '@material-ui/icons/LockOutlined'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
-import axios from 'axios'
-
-const apiEndpoint = process.env.REACT_APP_API
+const UserApi = require('../controllers/UserAPI')
 
 const styles = theme => ({
   layout: {
@@ -68,22 +66,24 @@ class SignIn extends React.Component {
   onSubmit = e => {
     e.preventDefault()
 
-    const { username, password } = this.state
+    const credentials = {
+      username: this.state.username,
+      password: this.state.password
+    }
 
-    axios
-      .post('https://' + apiEndpoint + '/login', { username, password })
-      .then(result => {
-        localStorage.setItem('jwtToken', result.data.token)
-        localStorage.setItem('name', result.data.name)
-        localStorage.setItem('username', result.data.username)
+    UserApi
+      .loginUser(credentials, result => {
+        console.log(result)
+        if(result.success){
 
-        this.setState({ message: '' })
-        this.props.history.push('/dashboard')
-      })
-      .catch(error => {
-        if (error.response.status === 401) {
+          localStorage.setItem('jwtToken', result.token)
+          localStorage.setItem('name', result.name)
+          localStorage.setItem('username', result.username)
+
+          this.props.history.push('/dashboard')
+        } else {
           this.setState({
-            message: 'Login failed. Username or password not match',
+            message: 'Invalid username or password.',
           })
         }
       })
