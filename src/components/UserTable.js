@@ -344,8 +344,8 @@ class EnhancedTable extends React.Component {
                         <TableCell component="th" scope="row" padding="none">
                           {n._id}
                         </TableCell>
-                        <TableCell numeric>{n.name}</TableCell>
-                        <TableCell numeric>{n.username}</TableCell>
+                        <TableCell>{n.name}</TableCell>
+                        <TableCell>{n.username}</TableCell>
                         <TableCell padding="checkbox">
                           <Tooltip title="Edit">
                             <IconButton aria-label="Edit">
