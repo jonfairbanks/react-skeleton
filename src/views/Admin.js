@@ -1,414 +1,270 @@
-import React from 'react'
-import classNames from 'classnames'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TablePagination from '@material-ui/core/TablePagination'
-import TableRow from '@material-ui/core/TableRow'
-import TableSortLabel from '@material-ui/core/TableSortLabel'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
-import Checkbox from '@material-ui/core/Checkbox'
+import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
-import DeleteIcon from '@material-ui/icons/Delete'
-import FilterListIcon from '@material-ui/icons/FilterList'
-import { lighten } from '@material-ui/core/styles/colorManipulator'
-import axios from 'axios'
-import EditUserDialog from './EditUserDialog'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import { mainMenuItems, secondaryMenuItems } from '../components/adminMenuItems'
+import SearchIcon from '@material-ui/icons/Search'
+import Input from '@material-ui/core/Input'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import AccountCircle from '@material-ui/icons/AccountCircle'
 
-import Navbar from '../components/navbar'
+import UserTable from '../components/UserTable'
 
-const apiEndpoint = process.env.REACT_APP_API
-
-function desc(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1
-  }
-  return 0
-}
-
-function stableSort(array, cmp) {
-  const stabilizedThis = array.map((el, index) => [el, index])
-  stabilizedThis.sort((a, b) => {
-    const order = cmp(a[0], b[0])
-    if (order !== 0) return order
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map(el => el[0])
-}
-
-function getSorting(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => desc(a, b, orderBy)
-    : (a, b) => -desc(a, b, orderBy)
-}
-
-const rows = [
-  { id: '_id', numeric: false, disablePadding: true, label: 'User _id' },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  {
-    id: 'username',
-    numeric: false,
-    disablePadding: false,
-    label: 'Username/Email',
-  },
-  { id: 'edit', numeric: false, disablePadding: true, label: 'Edit' },
-  { id: 'delete', numeric: false, disablePadding: true, label: 'Delete' },
-]
-
-class EnhancedTableHead extends React.Component {
-  createSortHandler = property => event => {
-    this.props.onRequestSort(event, property)
-  }
-
-  render() {
-    const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount,
-    } = this.props
-    return (
-      <TableHead>
-        <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
-          {rows.map(row => {
-            return (
-              <TableCell
-                key={row.id}
-                numeric={row.numeric}
-                padding={row.disablePadding ? 'none' : 'default'}
-                sortDirection={orderBy === row.id ? order : false}
-              >
-                <Tooltip
-                  title="Sort"
-                  placement={row.numeric ? 'bottom-end' : 'bottom-start'}
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === row.id}
-                    direction={order}
-                    onClick={this.createSortHandler(row.id)}
-                  >
-                    {row.label}
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-            )
-          }, this)}
-        </TableRow>
-      </TableHead>
-    )
-  }
-}
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-}
-
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing.unit,
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.primary.main,
-          backgroundColor: lighten(theme.palette.primary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.primary.dark,
-        },
-  spacer: {
-    flex: '1 1 100%',
-  },
-  actions: {
-    color: theme.palette.text.primary,
-  },
-  title: {
-    flex: '0 0 auto',
-  },
-})
-
-let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props
-  return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      <div className={classes.title}>
-        {numSelected > 0 ? (
-          <Typography color="inherit" variant="subheading">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography variant="title" id="tableTitle">
-            Registered Users
-          </Typography>
-        )}
-      </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
-    </Toolbar>
-  )
-}
-
-EnhancedTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-}
-
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar)
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
+    display: 'flex',
+  },
+  toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 36,
+  },
+  menuButtonHidden: {
+    display: 'none',
+  },
+  title: {
+    flexGrow: 1,
+  },
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerPaperClose: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: theme.spacing.unit * 7,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing.unit * 9,
+    },
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  chartContainer: {
+    marginLeft: -22,
+  },
+  tableContainer: {
+    height: 320,
+  },
+  h5: {
+    marginBottom: theme.spacing.unit * 2,
+  },
+  search: {
+    position: 'absolute',
+    right: '95px',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing.unit * 2,
+    marginLeft: 0,
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing.unit * 3,
+      width: 'auto',
+    },
   },
-  table: {
-    minWidth: 1020,
+  searchIcon: {
+    width: theme.spacing.unit * 5,
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  tableWrapper: {
-    overflowX: 'auto',
+  inputRoot: {
+    color: 'inherit',
+    width: '100%',
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 5,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 180,
+    },
   },
 })
 
-class EnhancedTable extends React.Component {
+class Dashboard extends Component {
   state = {
-    order: 'asc',
-    orderBy: 'calories',
-    selected: [],
-    data: [],
-    page: 0,
-    rowsPerPage: 5,
+    open: false,
+    anchorEl: null,
   }
 
-  handleRequestSort = (event, property) => {
-    const orderBy = property
-    let order = 'desc'
-    if (this.state.orderBy === property && this.state.order === 'desc') {
-      order = 'asc'
-    }
-    this.setState({ order, orderBy })
+  handleDrawerOpen = () => {
+    this.setState({ open: true })
   }
 
-  handleSelectAllClick = event => {
-    if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n.id) }))
-      return
-    }
-    this.setState({ selected: [] })
+  handleDrawerClose = () => {
+    this.setState({ open: false })
   }
 
-  handleClick = (event, id) => {
-    const { selected } = this.state
-    const selectedIndex = selected.indexOf(id)
-    let newSelected = []
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
-    }
-    this.setState({ selected: newSelected })
-  }
-
-  handleDelete = (event, id) => {
-    event.stopPropagation()
-    event.preventDefault()
-    console.log(id)
-    // Get all users from API
-    axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-      'jwtToken'
-    )
-    axios
-      .delete('https://' + apiEndpoint + '/users', { data: { _id: id } })
-      .then(result => {
-        console.log(result)
-        this.getAllUsersData()
-      })
-      .catch(error => {
-        if (error.response.status === 401) {
-          console.log(error.response)
-        }
-      })
-  }
-
-  handleChangePage = (event, page) => {
-    this.setState({ page })
-  }
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value })
-  }
-
-  isSelected = id => this.state.selected.indexOf(id) !== -1
-
-  getAllUsersData = () => {
-    // Get all users from API
-    axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-      'jwtToken'
-    )
-    axios
-      .get('https://' + apiEndpoint + '/users')
-      .then(res => {
-        this.setState({ data: res.data })
-      })
-      .catch(error => {
-        if (error.response.status === 401) {
-          this.props.history.push('/signin')
-        }
-      })
-  }
-
-  handleEdit = event => {
-    event.stopPropagation()
-  }
-
-  componentDidMount() {
-    this.getAllUsersData()
+  handleProfileMenuOpen = event => {
+    this.setState({ anchorEl: event.currentTarget })
   }
 
   render() {
+    const { anchorEl } = this.state
     const { classes } = this.props
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state
-    const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
+    const isMenuOpen = Boolean(anchorEl)
+
     return (
-      <div>
-        <Navbar />
-        <Paper className={classes.root}>
-          <EnhancedTableToolbar numSelected={selected.length} />
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="tableTitle">
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={this.handleSelectAllClick}
-                onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
-              />
-              <TableBody>
-                {stableSort(data, getSorting(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(n => {
-                    const isSelected = this.isSelected(n._id)
-                    return (
-                      <TableRow
-                        hover
-                        onClick={event => this.handleClick(event, n._id)}
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={n._id}
-                        selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          {n._id}
-                        </TableCell>
-                        <TableCell numeric>{n.name}</TableCell>
-                        <TableCell numeric>{n.username}</TableCell>
-                        <TableCell padding="checkbox">
-                          <Tooltip title="Edit">
-                            <IconButton aria-label="Edit">
-                              <EditUserDialog
-                                id={n._id}
-                                callBack={() => this.getAllUsersData()}
-                              />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell padding="checkbox">
-                          <Tooltip title="Delete">
-                            <IconButton aria-label="Delete">
-                              <DeleteIcon
-                                onClick={event =>
-                                  this.handleDelete(event, n._id)
-                                }
-                              />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 49 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
+      <React.Fragment>
+        <CssBaseline />
+        <div className={classes.root}>
+          <AppBar
+            position="absolute"
+            className={classNames(
+              classes.appBar,
+              this.state.open && classes.appBarShift
+            )}
+          >
+            <Toolbar
+              disableGutters={!this.state.open}
+              className={classes.toolbar}
+            >
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(
+                  classes.menuButton,
+                  this.state.open && classes.menuButtonHidden
                 )}
-              </TableBody>
-            </Table>
-          </div>
-          <TablePagination
-            component="div"
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            backIconButtonProps={{
-              'aria-label': 'Previous Page',
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                className={classes.title}
+                variant="title"
+                color="inherit"
+                noWrap
+              >
+                <a style={{ textDecoration: 'none', color: 'white' }} href="/">
+                  <i
+                    style={{ paddingRight: '10px' }}
+                    className="fab fa-react"
+                  />
+                  React-Skeleton
+                </a>
+              </Typography>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <Input
+                  placeholder="Search…"
+                  disableUnderline
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                />
+              </div>
+              <IconButton
+                aria-owns={isMenuOpen ? 'material-appbar' : null}
+                aria-haspopup="true"
+                onClick={this.handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classNames(
+                classes.drawerPaper,
+                !this.state.open && classes.drawerPaperClose
+              ),
             }}
-            nextIconButtonProps={{
-              'aria-label': 'Next Page',
-            }}
-            onChangePage={this.handleChangePage}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
-          />
-        </Paper>
-      </div>
+            open={this.state.open}
+          >
+            <div className={classes.toolbarIcon}>
+              <IconButton onClick={this.handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+            <Divider />
+            <List>{mainMenuItems}</List>
+            <Divider />
+            <List>{secondaryMenuItems}</List>
+          </Drawer>
+          <main className={classes.content}>
+            {true // TODO: There needs to be logic here to switch between tab components
+              ? <div>  
+                  <div className={classes.appBarSpacer}/>
+                  <Typography variant="h4" gutterBottom component="h2">
+                    Registered Users
+                  </Typography>
+                  <UserTable/>
+                </div>
+              : null
+            }
+          </main>
+        </div>
+      </React.Fragment>
     )
   }
 }
 
-EnhancedTable.propTypes = {
+Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(EnhancedTable)
+export default withStyles(styles)(Dashboard)
