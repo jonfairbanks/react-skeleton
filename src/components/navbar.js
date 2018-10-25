@@ -95,20 +95,15 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      anchorEl: null,
+      mobileMoreAnchorEl: null,
       session: props.session,
-      //isSignedIn: (props.session.user) ? true : false, // TO DO
-      name: '',
-      email: '',
-      photo: '',
+      isSignedIn: false,
+      isAdminUser: false,
+      name: null,
+      email: null,
+      photo: null
     }
-    /*
-    if (props.session.user) {
-      this.state.name = props.session.user.name
-      this.state.email = props.session.user.email
-      this.state.photo = props.session.user.photo
-      this.state.isAdmin =  (props.session.user.admin) ? true : false
-    }
-    */ // TO DO
   }
 
   state = {
@@ -145,7 +140,7 @@ class NavBar extends React.Component {
 
   handleGoToAdmin = () => {
     this.handleMobileMenuClose()
-    this.props.history.push('/users')
+    this.props.history.push('/admin')
   }
 
   handleGoToAccount = () => {
@@ -166,6 +161,16 @@ class NavBar extends React.Component {
     } else {
       this.setState({ isSignedIn: false, anchorEl: null })
     }
+
+    var session = JSON.parse(localStorage.getItem('session'));
+    if(session.user) {
+      this.setState({ 
+        name: session.user.name,
+        email: session.user.email,
+        photo: session.user.photo,
+        isAdminUser: (session.user.admin === true) ? true : false
+      })
+    }
   }
 
   render() {
@@ -185,7 +190,7 @@ class NavBar extends React.Component {
         {this.state.isSignedIn === true ? (
           <div>
             <MenuItem onClick={this.handleGoToDashboard}>Dashboard</MenuItem>
-            {this.state.isAdmin === true ? (
+            {this.state.isAdminUser === true ? (
               <MenuItem onClick={this.handleGoToAdmin}>Admin</MenuItem>
             ) : null}
             <MenuItem onClick={this.handleGoToAccount}>Account</MenuItem>
