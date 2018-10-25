@@ -53,13 +53,14 @@ const styles = theme => ({
   },
   menuButton: {
     marginLeft: 12,
-    marginRight: 36,
+    marginRight: 16,
   },
   menuButtonHidden: {
     display: 'none',
   },
   title: {
     flexGrow: 1,
+    marginLeft: 20,
   },
   drawerPaper: {
     position: 'relative',
@@ -162,6 +163,21 @@ class Navbar extends Component {
 
   handleMobileMenuClose = () => {
     this.setState({ mobileMoreAnchorEl: null })
+  }
+
+  handleSignIn = () => {
+    this.handleMobileMenuClose()
+    this.props.history.push('/signin')
+  }
+
+  handleGoToDashboard = () => {
+    this.handleMobileMenuClose()
+    this.props.history.push('/dashboard')
+  }
+
+  handleGoToAdmin = () => {
+    this.handleMobileMenuClose()
+    this.props.history.push('/admin')
   }
 
   render() {
