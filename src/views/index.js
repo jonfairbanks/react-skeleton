@@ -32,7 +32,7 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    paddingTop: theme.spacing.unit * 3.5,
+    paddingTop: theme.spacing.unit * 4,
     height: '100vh',
     overflow: 'auto',
   },
