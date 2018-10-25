@@ -30,6 +30,12 @@ const styles = theme => ({
   heroButtons: {
     marginTop: theme.spacing.unit * 4,
   },
+  content: {
+    flexGrow: 1,
+    paddingTop: theme.spacing.unit * 4,
+    height: '100vh',
+    overflow: 'auto',
+  },
   layout: {
     width: 'auto',
     marginLeft: theme.spacing.unit * 3,
@@ -56,7 +62,7 @@ class Home extends React.Component {
       <React.Fragment>
         <CssBaseline />
         <Navbar {...rest} />
-        <main>
+        <main className={classes.content}>
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>

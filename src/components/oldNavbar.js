@@ -163,7 +163,7 @@ class NavBar extends React.Component {
     }
 
     var session = JSON.parse(localStorage.getItem('session'));
-    if(session.user) {
+    if(session && session.user) {
       this.setState({ 
         name: session.user.name,
         email: session.user.email,
