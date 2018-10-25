@@ -7,8 +7,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
-import axios from 'axios';
 
+import axios from 'axios';
+const User = require('../controllers/User')
 const apiEndpoint = process.env.REACT_APP_API;
 
 export default class EditUserDialog extends React.Component {
@@ -39,18 +40,15 @@ export default class EditUserDialog extends React.Component {
   };
 
   getUserData = () => {
-    console.log(this.props.id);
-    // Get all users from API
-    axios.defaults.headers.common['Authorization'] = localStorage.getItem('jwtToken');
-    axios.get('https://' + apiEndpoint + '/users/' + this.props.id)
-      .then(res => {
-        this.setState({ data: res.data });
-      })
-      .catch((error) => {
-        if(error.response.status === 401) {
-          this.props.history.push("/signin");
+    User
+      .getUser(this.props.id, (result) => {
+        if(result.success){
+          this.setState({ data: result.data });
+        } else {
+          //todo: error handling
         }
-      });
+      })
+
   }
 
   updateUserData = () => {
@@ -74,7 +72,7 @@ export default class EditUserDialog extends React.Component {
     data[e.target.name] = e.target.value;
     this.setState({data});
   }
-  
+
   render() {
     const { _id, username, name } = this.state.data;
     return (
