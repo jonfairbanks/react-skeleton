@@ -16,7 +16,7 @@ It already has some of the basics baked right in:
 #### Getting Started
 1. `yarn install` to get dependencies
 2. `yarn start` to launch the development server
-3. `yarn prettier` to format code using [passport](https://github.com/jaredhanson/passport)
+3. `yarn prettier` to format code using [Prettier](https://prettier.io/)
 4. `yarn build` when ready to build for production
 5. `yarn eject` for advanced mode
  
