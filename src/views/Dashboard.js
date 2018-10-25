@@ -139,7 +139,7 @@ const styles = theme => ({
 
 class Dashboard extends Component {
   state = {
-    open: true,
+    open: false,
     anchorEl: null,
   }
 
