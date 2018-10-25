@@ -9,6 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
@@ -292,14 +293,27 @@ class Navbar extends Component {
                   }}
                 />
               </div>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : null}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+              {this.state.isSignedIn === true ? (
+                <IconButton
+                  aria-owns={isMenuOpen ? 'material-appbar' : null}
+                  aria-haspopup="true"
+                  onClick={this.handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              ) : (
+                <Button
+                  onClick={this.handleSignIn}
+                  style={{ color: '#FFF', borderColor: '#FFF' }}
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  className={classes.button}
+                >
+                  Sign In
+                </Button>
+              )}
             </Toolbar>
           </AppBar>
           {renderMenu}
