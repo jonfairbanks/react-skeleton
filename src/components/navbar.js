@@ -180,6 +180,24 @@ class Navbar extends Component {
     this.props.history.push('/admin')
   }
 
+  componentWillMount() {
+    if (localStorage.getItem('jwtToken')) {
+      this.setState({ isSignedIn: true, anchorEl: null })
+    } else {
+      this.setState({ isSignedIn: false, anchorEl: null })
+    }
+
+    var session = JSON.parse(localStorage.getItem('session'));
+    if(session && session.user) {
+      this.setState({ 
+        name: session.user.name,
+        email: session.user.email,
+        photo: session.user.photo,
+        isAdminUser: (session.user.admin === true) ? true : false
+      })
+    }
+  }
+
   render() {
     const { anchorEl } = this.state
     const { classes } = this.props
