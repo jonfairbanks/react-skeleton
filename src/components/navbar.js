@@ -1,41 +1,95 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import { withStyles } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import { mainMenuItems, secondaryMenuItems } from './adminMenuItems'
+import SearchIcon from '@material-ui/icons/Search'
 import Input from '@material-ui/core/Input'
-import Badge from '@material-ui/core/Badge'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
-import { fade } from '@material-ui/core/styles/colorManipulator'
-import { withStyles } from '@material-ui/core/styles'
-import SearchIcon from '@material-ui/icons/Search'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import MailIcon from '@material-ui/icons/Mail'
-import NotificationsIcon from '@material-ui/icons/Notifications'
-import MoreIcon from '@material-ui/icons/MoreVert'
+
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    display: 'flex',
   },
-  grow: {
-    flexGrow: 1,
+  toolbar: {
+    paddingRight: 24, // Keep padding when drawer is closed
   },
-  button: {
-    margin: theme.spacing.unit,
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
+    marginLeft: 12,
+    marginRight: 36,
+  },
+  menuButtonHidden: {
+    display: 'none',
   },
   title: {
-    display: 'none',
+    flexGrow: 1,
+  },
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerPaperClose: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: theme.spacing.unit * 7,
     [theme.breakpoints.up('sm')]: {
-      display: 'block',
+      width: theme.spacing.unit * 9,
     },
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  h5: {
+    marginBottom: theme.spacing.unit * 2,
   },
   search: {
     position: 'absolute',
@@ -77,38 +131,20 @@ const styles = theme => ({
       width: 180,
     },
   },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
 })
 
-class NavBar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      anchorEl: null,
-      mobileMoreAnchorEl: null,
-      session: props.session,
-      isSignedIn: false,
-      isAdminUser: false,
-      name: null,
-      email: null,
-      photo: null
-    }
+class Dashboard extends Component {
+  state = {
+    open: false,
+    anchorEl: null,
   }
 
-  state = {
-    anchorEl: null,
-    mobileMoreAnchorEl: null,
+  handleDrawerOpen = () => {
+    this.setState({ open: true })
+  }
+
+  handleDrawerClose = () => {
+    this.setState({ open: false })
   }
 
   handleProfileMenuOpen = event => {
@@ -128,56 +164,10 @@ class NavBar extends React.Component {
     this.setState({ mobileMoreAnchorEl: null })
   }
 
-  handleSignIn = () => {
-    this.handleMobileMenuClose()
-    this.props.history.push('/signin')
-  }
-
-  handleGoToDashboard = () => {
-    this.handleMobileMenuClose()
-    this.props.history.push('/dashboard')
-  }
-
-  handleGoToAdmin = () => {
-    this.handleMobileMenuClose()
-    this.props.history.push('/admin')
-  }
-
-  handleGoToAccount = () => {
-    this.handleMobileMenuClose()
-    //Router.push('/account') // TO DO
-  }
-
-  handleSignOut = () => {
-    localStorage.removeItem('jwtToken')
-    localStorage.removeItem('username')
-    localStorage.removeItem('name')
-    window.location.reload()
-  }
-
-  componentWillMount() {
-    if (localStorage.getItem('jwtToken')) {
-      this.setState({ isSignedIn: true, anchorEl: null })
-    } else {
-      this.setState({ isSignedIn: false, anchorEl: null })
-    }
-
-    var session = JSON.parse(localStorage.getItem('session'));
-    if(session.user) {
-      this.setState({ 
-        name: session.user.name,
-        email: session.user.email,
-        photo: session.user.photo,
-        isAdminUser: (session.user.admin === true) ? true : false
-      })
-    }
-  }
-
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state
+    const { anchorEl } = this.state
     const { classes } = this.props
     const isMenuOpen = Boolean(anchorEl)
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
     const renderMenu = (
       <Menu
@@ -200,132 +190,104 @@ class NavBar extends React.Component {
       </Menu>
     )
 
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMobileMenuClose}
-      >
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge
-              className={classes.margin}
-              badgeContent={4}
-              color="secondary"
-            >
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge
-              className={classes.margin}
-              badgeContent={11}
-              color="secondary"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            {this.state.isSignedIn === true ? (
-              <AccountCircle />
-            ) : (
-              <Button
-                onClick={this.handleSignIn}
-                style={{ color: '#FFF', borderColor: '#FFF' }}
-                variant="outlined"
-                color="primary"
-                size="small"
-                className={classes.button}
-              >
-                Sign In
-              </Button>
-            )}
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    )
-
     return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography
-              className={classes.title}
-              variant="title"
-              color="inherit"
-              noWrap
+      <React.Fragment>
+        <CssBaseline />
+        <div className={classes.root}>
+          <AppBar
+            position="absolute"
+            className={classNames(
+              classes.appBar,
+              this.state.open && classes.appBarShift
+            )}
+          >
+            <Toolbar
+              disableGutters={!this.state.open}
+              className={classes.toolbar}
             >
-              <a style={{ textDecoration: 'none', color: 'white' }} href="/">
-                <i style={{ paddingRight: '10px' }} className="fab fa-react" />
-                React-Skeleton
-              </a>
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
+              {!this.props.location.pathname === '/'
+                ? <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={this.handleDrawerOpen}
+                    className={classNames(
+                      classes.menuButton,
+                      this.state.open && classes.menuButtonHidden
+                    )}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                : null
+              }
+              <Typography
+                className={classes.title}
+                variant="title"
+                color="inherit"
+                noWrap
+              >
+                <a style={{ textDecoration: 'none', color: 'white' }} href="/">
+                  <i
+                    style={{ paddingRight: '10px' }}
+                    className="fab fa-react"
+                  />
+                  React-Skeleton
+                </a>
+              </Typography>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <Input
+                  placeholder="Search…"
+                  disableUnderline
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                />
               </div>
-              <Input
-                placeholder="Search…"
-                disableUnderline
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              {this.state.isSignedIn === true ? (
-                <IconButton
-                  aria-owns={isMenuOpen ? 'material-appbar' : null}
-                  aria-haspopup="true"
-                  onClick={this.handleProfileMenuOpen}
-                  color="inherit"
-                >
-                  <AccountCircle />
-                </IconButton>
-              ) : (
-                <Button
-                  onClick={this.handleSignIn}
-                  style={{ color: '#FFF', borderColor: '#FFF' }}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  className={classes.button}
-                >
-                  Sign In
-                </Button>
-              )}
-            </div>
-            <div className={classes.sectionMobile}>
               <IconButton
+                aria-owns={isMenuOpen ? 'material-appbar' : null}
                 aria-haspopup="true"
-                onClick={this.handleMobileMenuOpen}
+                onClick={this.handleProfileMenuOpen}
                 color="inherit"
               >
-                <MoreIcon />
+                <AccountCircle />
               </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-        {renderMenu}
-        {renderMobileMenu}
-      </div>
+            </Toolbar>
+          </AppBar>
+          {renderMenu}
+          {!this.props.location.pathname === '/'
+            ? <Drawer
+                variant="permanent"
+                classes={{
+                  paper: classNames(
+                    classes.drawerPaper,
+                    !this.state.open && classes.drawerPaperClose
+                  ),
+                }}
+                open={this.state.open}
+              >
+                <div className={classes.toolbarIcon}>
+                  <IconButton onClick={this.handleDrawerClose}>
+                    <ChevronLeftIcon />
+                  </IconButton>
+                </div>
+                <Divider />
+                <List>{mainMenuItems}</List>
+                <Divider />
+                <List>{secondaryMenuItems}</List>
+              </Drawer>
+            : null
+          }
+        </div>
+      </React.Fragment>
     )
   }
 }
 
-NavBar.propTypes = {
+Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(NavBar)
+export default withStyles(styles)(Dashboard)
