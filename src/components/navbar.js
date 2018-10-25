@@ -180,6 +180,18 @@ class Navbar extends Component {
     this.props.history.push('/admin')
   }
 
+  handleGoToAccount = () => {
+    this.handleMobileMenuClose()
+    this.props.history.push('/account')
+  }
+
+  handleSignOut = () => {
+    localStorage.removeItem('jwtToken')
+    localStorage.removeItem('username')
+    localStorage.removeItem('name')
+    window.location.reload()
+  }
+
   componentWillMount() {
     if (localStorage.getItem('jwtToken')) {
       this.setState({ isSignedIn: true, anchorEl: null })
